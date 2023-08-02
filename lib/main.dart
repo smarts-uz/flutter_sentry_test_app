@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
-void main() {
-  runApp(const MainApp());
+Future<void> main() async {
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://ae25336f8d7f7ae39974f3c679f2a370@o4505634390212608.ingest.sentry.io/4505634411249664';
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(const MainApp()),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -9,10 +17,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child: ElevatedButton(
+            onPressed: () => throw Exception('Intentional Exception Message'),
+            child: const Text('Throw Exception'),
+          ),
         ),
       ),
     );
